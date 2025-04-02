@@ -57,7 +57,7 @@ html, body {
     display: flex;
     height: 50%;
     flex-wrap: wrap;
-    background-image: url("public/CSS/imagens/Sem-titulo-2.png");
+    background-image: url("public/CSS/imagens/imgbackground.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
