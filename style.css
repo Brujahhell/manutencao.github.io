@@ -53,15 +53,6 @@ html, body {
     margin-bottom: 20px;
 }
 
-.linha1 {
-    display: flex;
-    height: 50%;
-    flex-wrap: wrap;
-    background-image: url("/public/CSS/imagens/imgbackground.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
 .linha2 {
     padding-top: 2%;
     display: flex;
