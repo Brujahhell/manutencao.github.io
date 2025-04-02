@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relatório PDF</title>
+</head>
+<body>
+<h1>Relatório de Solicitação de Serviço</h1>
+
+<p><strong>Tipo de Serviço:</strong> {{ $data['tipo_servico'] }}</p>
+<p><strong>Opção 1:</strong> {{ $data['subserviço'] }}</p>
+<p><strong>Opção 2:</strong> {{ $data['detalhe'] }}</p>
+
+<h2>Informações do Solicitante</h2>
+<p><strong>Nome:</strong> {{ $data['nome'] }}</p>
+<p><strong>E-mail:</strong> {{ $data['email'] }}</p>
+<p><strong>Telefone 1:</strong> {{ $data['telefone1'] }}</p>
+<p><strong>Telefone 2:</strong> {{ $data['telefone2'] }}</p>
+
+<h2>Localização</h2>
+<p><strong>Endereço Completo:</strong> {{ $data['endereco'] }}</p>
+<p><strong>Município:</strong> {{ $data['municipio'] }}</p>
+
+<h2>Descrição do Serviço</h2>
+<p>{{ $data['descricao_servico'] }}</p>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="br">
+<head>
+    <title>FLAVINHO</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="screen">
+</head>
+<body>
+<div class="linha1"></div>
+<form action="{{ route('form.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <div class="linha2">
+        <div class="coluna-30">
+            <select name="tipo_servico" class="select-input" required>
+                <option>Pintura</option>
+                <option>Eletrica</option>
+                <option>Reparo</option>
+            </select>
+        </div>
+        <div class="coluna-30">
+            <select name="subserviço" class="select-input" required>
+                <option>Pintura de Cômodo</option>
+                <option>Pintura Externa</option>
+                <option>Pintura de Móveis</option>
+            </select>
+        </div>
+        <div class="coluna-30">
+            <select name="detalhe" class="select-input" required>
+                <option>Pintura de Quarto</option>
+                <option>Pintura de Sala</option>
+                <option>Pintura de Banheiro</option>
+                <option>Pintura de Cozinha</option>
+                <option>Pintura da Copa</option>
+                <option>Pintura da Lateral da casa</option>
+                <option>Pintura da Frente da Casa </option>
+                <option>Pintura de Casa completa</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="form1">
+            <div class="coluna-30">
+                <input class="input-form text-input" name="nome" placeholder="Nome" required>
+            </div>
+            <div class="coluna-30">
+                <input class="input-form text-input"name="email"  placeholder="E-mail" required>
+            </div>
+        </div>
+    </div>
+    <div class="form2">
+        <div class="coluna-30">
+            <input class="input-form text-input"name="telefone1"  placeholder="Telefone 1" required>
+        </div>
+        <div class="coluna-30">
+            <input class="input-form text-input"name="telefone2"  placeholder="Telefone 2">
+        </div>
+    </div>
+    <div>
+        <div class="form3">
+            <div class="coluna-30">
+                <input class="input-form text-input"name="endereco"  placeholder="Endereço Completo" required>
+            </div>
+            <div class="coluna-30">
+                <input class="input-form text-input"name="municipio"  placeholder="Municipio" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="linha4">
+        <textarea class="text_area"name="descricao_servico"  placeholder="*Descreva o serviço a ser solicitado." required></textarea>
+    </div>
+
+    <div class="linha3">
+        <button id="downloadPdfButton" class="button button2"> Solicitar</button>
+    </div>
+
+    <div class="linha3" style="padding-top: 2%">Após gerar o arquivo de solicitação, envie o PDF para o WhatsApp Abaixo</div>
+
+</form>
+
+<footer id="rodapé">
+    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 1%">
+        <div class="textorodape">
+            <p>Não sabe ou está sem tempo para fazer aquele reparo.</p>
+            <p>Estou aqui para lhe ajudar.</p>
+            <p>E para te atender da melhor forma possível, Confira nossos contatos abaixo:</p>
+        </div>
+        <div style="font-size: 30px; text-align: center;">
+            <p>Horário de Atendimento: Segunda a Sexta de 8:00 às 18:00.</p>
+        </div>
+        <div class="linhalogo" style="display: flex; justify-content: space-between; width: 100%;">
+            <a class="coluna-30icon" target="_blank" href="https://www.linkedin.com//">
+                <img width="60px" class="instagram" src="/assets/imagens/icon/linkedin.png" alt="Facebook">
+            </a>
+            <a class="coluna-30icon" style="align-items: center" target="_blank"
+               href="https://www.instagram.com/">
+                <img width="60px" class="instagram" src="/assets/imagens/icon/instagram.png" alt="Instagram">
+            </a>
+            <a class="coluna-30icon" target="_blank" href="https://api.whatsapp.com/send?phone=5527981116969">
+                <img width="60px" class="instagram" src="/assets/imagens/icon/whatsapp.png" alt="WhatsApp">
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.getElementById('downloadPdfButton').addEventListener('click', function() {
+        // Dados para gerar o PDF
+        var formData = new FormData();
+        formData.append('tipo_servico', 'valor_tipo_servico'); // Substitua pelos valores reais
+        formData.append('subserviço', 'valor_subservico'); // Substitua pelos valores reais
+        // Adicione outros campos aqui...
+
+        // Enviar para o servidor para gerar o PDF
+        fetch('/gerar-pdf', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+            .then(response => response.blob())
+            .then(blob => {
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.href = url;
+                link.download = 'arquivo.pdf';  // Nome do arquivo PDF
+            })
+            .catch(error => console.error('Erro ao gerar o PDF:', error));
+    });
+</script>
+
+
+
+</body>
+</html>
+
