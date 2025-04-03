@@ -129,40 +129,18 @@
 </footer>
 
 <script>
-        document.getElementById('downloadPdfButton').addEventListener('click', async function(event) {
-            event.preventDefault(); // Impede o envio do formulário
-
-            const form = document.querySelector('form');
+        document.getElementById("redirectToPDF").addEventListener("click", function() {
+            const form = document.getElementById("servico-form");
             const formData = new FormData(form);
+            
+            // Criar query string com os dados do formulário
+            const params = new URLSearchParams();
+            for (const [key, value] of formData.entries()) {
+                params.append(key, value);
+            }
 
-            // Preenchendo os elementos HTML com os dados do formulário
-            document.getElementById('tipo_servico').innerText = formData.get('tipo_servico');
-            document.getElementById('subservico').innerText = formData.get('subserviço');
-            document.getElementById('detalhe').innerText = formData.get('detalhe');
-            document.getElementById('nome').innerText = formData.get('nome');
-            document.getElementById('email').innerText = formData.get('email');
-            document.getElementById('telefone1').innerText = formData.get('telefone1');
-            document.getElementById('telefone2').innerText = formData.get('telefone2');
-            document.getElementById('endereco').innerText = formData.get('endereco');
-            document.getElementById('municipio').innerText = formData.get('municipio');
-            document.getElementById('descricao_servico').innerText = formData.get('descricao_servico');
-
-            // Aguarde um pequeno tempo para renderizar os dados
-            await new Promise(resolve => setTimeout(resolve, 100));
-
-            // Captura a div em uma imagem
-            html2canvas(document.getElementById('pdf-content')).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF();
-
-                // Ajusta o tamanho da imagem no PDF
-                const imgWidth = 190;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-                pdf.save("relatorio.pdf"); // Faz o download
-            });
+            // Redirecionar para pdf.html com os dados na URL
+            window.location.href = "pdf.html?" + params.toString();
         });
     </script>
 </body>
