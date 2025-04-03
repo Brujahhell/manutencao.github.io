@@ -149,35 +149,35 @@ document.getElementById("downloadPdfButton").addEventListener("click", function(
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
 
-    // Definir fonte padrão
-    pdf.setFont("helvetica", "bold");
-    
-    // Cabeçalho principal
-    pdf.setFontSize(18);
-    pdf.text("Relatório de Solicitação de Serviço", 10, 20);
-    
-    pdf.setFontSize(12);
-    let y = 30; // Posição inicial
+    // Configurações iniciais
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    let y = 20; // Posição inicial para o conteúdo
 
-    // Função para adicionar seções com título em negrito
+    // Centralizar o título principal
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(18);
+    pdf.text("Relatório de Solicitação de Serviço", pageWidth / 2, y, { align: "center" });
+    y += 15; // Espaço abaixo do título
+
+    // Função para adicionar seções centralizadas
     function addSection(title) {
+        y += 10; // Espaço acima da seção
         pdf.setFont("helvetica", "bold");
         pdf.setFontSize(14);
-        pdf.text(title, 10, y);
-        y += 8;
-        pdf.setFontSize(12);
+        pdf.text(title, pageWidth / 2, y, { align: "center" });
+        y += 8; // Espaço abaixo do título da seção
     }
 
-    // Função para adicionar texto formatado
+    // Função para adicionar informações com indentação
     function addText(label, text) {
         pdf.setFont("helvetica", "bold");
         pdf.text(label, 10, y);
         pdf.setFont("helvetica", "normal");
-        pdf.text(text, 50, y);
-        y += 8;
+        pdf.text(text, 15, y); // deslocado 5mm (~0.5cm) para a direita
+        y += 7;
     }
 
-    // Adicionando seções formatadas
+    // Adicionando as seções formatadas
     addSection("Tipo de Serviço");
     addText("Tipo de Serviço:", tipoServico);
     addText("Opção 1:", opcao1);
@@ -196,7 +196,7 @@ document.getElementById("downloadPdfButton").addEventListener("click", function(
     addSection("Descrição do Serviço");
     pdf.setFont("helvetica", "normal");
     const descricaoDividida = pdf.splitTextToSize(descricaoServico, 180);
-    pdf.text(descricaoDividida, 10, y + 5);
+    pdf.text(descricaoDividida, 15, y + 5);
 
     // Salvando o PDF
     pdf.save("Relatorio_Servico.pdf");
