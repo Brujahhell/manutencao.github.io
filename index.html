@@ -132,6 +132,47 @@
             .catch(error => console.error('Erro ao gerar o PDF:', error));
     });
 </script>
+    <script>
+        document.getElementById("orcamentoForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Captura os dados do formulário
+            const data = {
+                tipo_servico: document.getElementById("tipo_servico").value,
+                subservico: document.getElementById("subservico").value,
+                detalhe: document.getElementById("detalhe").value,
+                nome: document.getElementById("nome").value,
+                email: document.getElementById("email").value,
+                telefone1: document.getElementById("telefone1").value,
+                telefone2: document.getElementById("telefone2").value,
+                endereco: document.getElementById("endereco").value,
+                municipio: document.getElementById("municipio").value,
+                descricao_servico: document.getElementById("descricao_servico").value
+            };
+
+            // Gera o nome do arquivo
+            const nomeArquivo = data.nome.toLowerCase().replace(/\s+/g, '-') + ".pdf";
+
+            // Importa jsPDF
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            // Adiciona texto ao PDF
+            let y = 10; // Posição vertical inicial
+            pdf.setFontSize(14);
+            pdf.text("Orçamento de Serviço", 10, y);
+            y += 10;
+            
+            Object.keys(data).forEach(key => {
+                pdf.setFontSize(10);
+                pdf.text(`${key.replace("_", " ")}: ${data[key]}`, 10, y);
+                y += 8;
+            });
+
+            // Baixa o PDF
+            pdf.save(nomeArquivo);
+        });
+    </script>
 
 
 
