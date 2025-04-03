@@ -80,6 +80,26 @@
     <div class="linha3" style="padding-top: 2%">Após gerar o arquivo de solicitação, envie o PDF para o WhatsApp Abaixo</div>
 
 </form>
+    <div id="pdf-content" style="display: none;">
+        <h1>Relatório de Solicitação de Serviço</h1>
+
+        <p><strong>Tipo de Serviço:</strong> <span id="tipo_servico"></span></p>
+        <p><strong>Opção 1:</strong> <span id="subservico"></span></p>
+        <p><strong>Opção 2:</strong> <span id="detalhe"></span></p>
+
+        <h2>Informações do Solicitante</h2>
+        <p><strong>Nome:</strong> <span id="nome"></span></p>
+        <p><strong>E-mail:</strong> <span id="email"></span></p>
+        <p><strong>Telefone 1:</strong> <span id="telefone1"></span></p>
+        <p><strong>Telefone 2:</strong> <span id="telefone2"></span></p>
+
+        <h2>Localização</h2>
+        <p><strong>Endereço Completo:</strong> <span id="endereco"></span></p>
+        <p><strong>Município:</strong> <span id="municipio"></span></p>
+
+        <h2>Descrição do Serviço</h2>
+        <p id="descricao_servico"></p>
+    </div>
 
 <footer id="rodapé">
     <div style="display: flex; flex-direction: column; align-items: center; margin-top: 1%">
@@ -108,47 +128,40 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-    document.getElementById('downloadPdfButton').addEventListener('click', function(event) {
-        event.preventDefault(); // Impede o envio do formulário
+        document.getElementById('downloadPdfButton').addEventListener('click', function(event) {
+            event.preventDefault(); // Impede o envio do formulário
 
-        const form = document.querySelector('form');
-        const formData = new FormData(form);
+            const form = document.querySelector('form');
+            const formData = new FormData(form);
 
-        const data = {
-            tipo_servico: formData.get('tipo_servico'),
-            subservico: formData.get('subserviço'),
-            detalhe: formData.get('detalhe'),
-            nome: formData.get('nome'),
-            email: formData.get('email'),
-            telefone1: formData.get('telefone1'),
-            telefone2: formData.get('telefone2'),
-            endereco: formData.get('endereco'),
-            municipio: formData.get('municipio'),
-            descricao_servico: formData.get('descricao_servico')
-        };
+            // Preenchendo os elementos HTML com os dados do formulário
+            document.getElementById('tipo_servico').innerText = formData.get('tipo_servico');
+            document.getElementById('subservico').innerText = formData.get('subserviço');
+            document.getElementById('detalhe').innerText = formData.get('detalhe');
+            document.getElementById('nome').innerText = formData.get('nome');
+            document.getElementById('email').innerText = formData.get('email');
+            document.getElementById('telefone1').innerText = formData.get('telefone1');
+            document.getElementById('telefone2').innerText = formData.get('telefone2');
+            document.getElementById('endereco').innerText = formData.get('endereco');
+            document.getElementById('municipio').innerText = formData.get('municipio');
+            document.getElementById('descricao_servico').innerText = formData.get('descricao_servico');
 
-        // Gerar nome do arquivo
-        const nomeArquivo = data.nome.toLowerCase().replace(/\s+/g, '-') + ".pdf";
+            // Criando o nome do arquivo
+            const nomeArquivo = formData.get('nome').toLowerCase().replace(/\s+/g, '-') + ".pdf";
 
-        // Criar PDF com jsPDF
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF();
+            // Gerando o PDF a partir do HTML
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
 
-        let y = 10; // Posição inicial no PDF
-        pdf.setFontSize(16);
-        pdf.text("Orçamento de Serviço", 10, y);
-        y += 10;
-
-        Object.keys(data).forEach(key => {
-            pdf.setFontSize(12);
-            pdf.text(`${key.replace("_", " ")}: ${data[key]}`, 10, y);
-            y += 8;
+            pdf.html(document.getElementById('pdf-content'), {
+                callback: function (pdf) {
+                    pdf.save(nomeArquivo); // Faz o download
+                },
+                x: 10,
+                y: 10
+            });
         });
-
-        // Baixar o PDF
-        pdf.save(nomeArquivo);
-    });
-</script>
+    </script>
 </body>
 </html>
 
