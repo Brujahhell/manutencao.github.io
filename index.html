@@ -123,34 +123,63 @@
 </footer>
 
 <script>
-        document.getElementById("downloadPdfButton").addEventListener("click", function(event) {
+document.getElementById("downloadPdfButton").addEventListener("click", function(event) {
     event.preventDefault();
 
-    // Preenchendo os dados no HTML antes de capturar a imagem
-    document.getElementById("tipo_servico").textContent = document.querySelector("select[name='tipo_servico']").value;
-    document.getElementById("subservico").textContent = document.querySelector("select[name='subserviço']").value;
-    document.getElementById("detalhe").textContent = document.querySelector("select[name='detalhe']").value;
-    document.getElementById("nome").textContent = document.querySelector("input[name='nome']").value;
-    document.getElementById("email").textContent = document.querySelector("input[name='email']").value;
-    document.getElementById("telefone1").textContent = document.querySelector("input[name='telefone1']").value;
-    document.getElementById("telefone2").textContent = document.querySelector("input[name='telefone2']").value || "Não informado";
-    document.getElementById("endereco").textContent = document.querySelector("input[name='endereco']").value;
-    document.getElementById("municipio").textContent = document.querySelector("input[name='municipio']").value;
-    document.getElementById("descricao_servico").textContent = document.querySelector("textarea[name='descricao_servico']").value;
+    // Pegando os valores do formulário
+    const tipoServico = document.querySelector("select[name='tipo_servico']").value;
+    const subServico = document.querySelector("select[name='subserviço']").value;
+    const detalhe = document.querySelector("select[name='detalhe']").value;
+    const nome = document.querySelector("input[name='nome']").value;
+    const email = document.querySelector("input[name='email']").value;
+    const telefone1 = document.querySelector("input[name='telefone1']").value;
+    const telefone2 = document.querySelector("input[name='telefone2']").value || "Não informado";
+    const endereco = document.querySelector("input[name='endereco']").value;
+    const municipio = document.querySelector("input[name='municipio']").value;
+    const descricaoServico = document.querySelector("textarea[name='descricao_servico']").value;
 
-    // Pequeno atraso antes de capturar a imagem para evitar erros
-    setTimeout(() => {
-        html2canvas(document.getElementById("pdf-content")).then(canvas => {
-            const imgData = canvas.toDataURL("image/png");
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-            pdf.addImage(imgData, "PNG", 10, 10, 190, 0);
-            pdf.save("Solicitacao_Servico.pdf");
-        }).catch(error => {
-            console.error("Erro ao capturar imagem com html2canvas:", error);
-        });
-    }, 500); // Aguarda 500ms para evitar erro de PNG corrompido
+    // Criando o PDF com jsPDF
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(16);
+    pdf.text("Solicitação de Serviço", 105, 20, null, null, "center");
+
+    pdf.setFontSize(12);
+    pdf.setFont("helvetica", "normal");
+    
+    let y = 40; // Posição inicial no PDF
+
+    const addText = (label, text) => {
+        pdf.setFont("helvetica", "bold");
+        pdf.text(label, 10, y);
+        pdf.setFont("helvetica", "normal");
+        pdf.text(text, 60, y);
+        y += 10;
+    };
+
+    addText("Tipo de Serviço:", tipoServico);
+    addText("Subserviço:", subServico);
+    addText("Detalhe:", detalhe);
+    addText("Nome:", nome);
+    addText("E-mail:", email);
+    addText("Telefone 1:", telefone1);
+    addText("Telefone 2:", telefone2);
+    addText("Endereço:", endereco);
+    addText("Município:", municipio);
+
+    // Descrição do serviço (quebra de linha automática)
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Descrição do Serviço:", 10, y);
+    pdf.setFont("helvetica", "normal");
+    const descricaoDividida = pdf.splitTextToSize(descricaoServico, 180);
+    pdf.text(descricaoDividida, 10, y + 10);
+    
+    // Salvando o PDF
+    pdf.save("Solicitacao_Servico.pdf");
 });
+
 
     </script>
 </body>
