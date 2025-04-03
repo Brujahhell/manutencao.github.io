@@ -8,6 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <link rel="stylesheet" type="text/css" href="./style.css" media="screen">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
     <div><img src="public /CSS/imagens/imgbackground.png" style="width: 100%"></div> 
@@ -126,9 +128,8 @@
     </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-        document.getElementById('downloadPdfButton').addEventListener('click', function(event) {
+        document.getElementById('downloadPdfButton').addEventListener('click', async function(event) {
             event.preventDefault(); // Impede o envio do formulário
 
             const form = document.querySelector('form');
@@ -146,19 +147,21 @@
             document.getElementById('municipio').innerText = formData.get('municipio');
             document.getElementById('descricao_servico').innerText = formData.get('descricao_servico');
 
-            // Criando o nome do arquivo
-            const nomeArquivo = formData.get('nome').toLowerCase().replace(/\s+/g, '-') + ".pdf";
+            // Aguarde um pequeno tempo para renderizar os dados
+            await new Promise(resolve => setTimeout(resolve, 100));
 
-            // Gerando o PDF a partir do HTML
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
+            // Captura a div em uma imagem
+            html2canvas(document.getElementById('pdf-content')).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
 
-            pdf.html(document.getElementById('pdf-content'), {
-                callback: function (pdf) {
-                    pdf.save(nomeArquivo); // Faz o download
-                },
-                x: 10,
-                y: 10
+                // Ajusta o tamanho da imagem no PDF
+                const imgWidth = 190;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                pdf.save("relatorio.pdf"); // Faz o download
             });
         });
     </script>
