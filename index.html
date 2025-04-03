@@ -82,25 +82,19 @@
     <div class="linha3" style="padding-top: 2%">Após gerar o arquivo de solicitação, envie o PDF para o WhatsApp Abaixo</div>
 
 </form>
-    <div id="pdf-content" style="display: none;">
-        <h1>Relatório de Solicitação de Serviço</h1>
 
+<div id="pdf-content" style="display:none; padding:20px; border:1px solid black;">
+        <h2>Solicitação de Serviço</h2>
         <p><strong>Tipo de Serviço:</strong> <span id="tipo_servico"></span></p>
-        <p><strong>Opção 1:</strong> <span id="subservico"></span></p>
-        <p><strong>Opção 2:</strong> <span id="detalhe"></span></p>
-
-        <h2>Informações do Solicitante</h2>
+        <p><strong>Subserviço:</strong> <span id="subservico"></span></p>
+        <p><strong>Detalhe:</strong> <span id="detalhe"></span></p>
         <p><strong>Nome:</strong> <span id="nome"></span></p>
-        <p><strong>E-mail:</strong> <span id="email"></span></p>
+        <p><strong>Email:</strong> <span id="email"></span></p>
         <p><strong>Telefone 1:</strong> <span id="telefone1"></span></p>
         <p><strong>Telefone 2:</strong> <span id="telefone2"></span></p>
-
-        <h2>Localização</h2>
-        <p><strong>Endereço Completo:</strong> <span id="endereco"></span></p>
+        <p><strong>Endereço:</strong> <span id="endereco"></span></p>
         <p><strong>Município:</strong> <span id="municipio"></span></p>
-
-        <h2>Descrição do Serviço</h2>
-        <p id="descricao_servico"></p>
+        <p><strong>Descrição do Serviço:</strong> <span id="descricao_servico"></span></p>
     </div>
 
 <footer id="rodapé">
@@ -129,19 +123,29 @@
 </footer>
 
 <script>
-        document.getElementById("redirectToPDF").addEventListener("click", function() {
-            const form = document.getElementById("servico-form");
-            const formData = new FormData(form);
-            
-            // Criar query string com os dados do formulário
-            const params = new URLSearchParams();
-            for (const [key, value] of formData.entries()) {
-                params.append(key, value);
-            }
+        document.getElementById("downloadPdfButton").addEventListener("click", function(event) {
+            event.preventDefault();
 
-            // Redirecionar para pdf.html com os dados na URL
-            window.location.href = "https://brujahhell.github.io/manutencao.github.io/pdf.html?" + params.toString();
+            // Preenchendo a div #pdf-content com os valores do formulário
+            document.getElementById("tipo_servico").textContent = document.querySelector("select[name='tipo_servico']").value;
+            document.getElementById("subservico").textContent = document.querySelector("select[name='subserviço']").value;
+            document.getElementById("detalhe").textContent = document.querySelector("select[name='detalhe']").value;
+            document.getElementById("nome").textContent = document.querySelector("input[name='nome']").value;
+            document.getElementById("email").textContent = document.querySelector("input[name='email']").value;
+            document.getElementById("telefone1").textContent = document.querySelector("input[name='telefone1']").value;
+            document.getElementById("telefone2").textContent = document.querySelector("input[name='telefone2']").value || "Não informado";
+            document.getElementById("endereco").textContent = document.querySelector("input[name='endereco']").value;
+            document.getElementById("municipio").textContent = document.querySelector("input[name='municipio']").value;
+            document.getElementById("descricao_servico").textContent = document.querySelector("textarea[name='descricao_servico']").value;
 
+            // Usa html2canvas para capturar a div como imagem
+            html2canvas(document.getElementById("pdf-content")).then(canvas => {
+                const imgData = canvas.toDataURL("image/png");
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
+                pdf.addImage(imgData, "PNG", 10, 10, 190, 0);
+                pdf.save("Solicitacao_Servico.pdf");
+            });
         });
     </script>
 </body>
