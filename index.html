@@ -152,6 +152,7 @@ document.getElementById("downloadPdfButton").addEventListener("click", function(
     // Configurações iniciais
     const pageWidth = pdf.internal.pageSize.getWidth();
     let y = 20; // Posição inicial para o conteúdo
+    const marginLeft = 15; // Margem esquerda para alinhamento dos textos
 
     // Centralizar o título principal
     pdf.setFont("helvetica", "bold");
@@ -159,25 +160,25 @@ document.getElementById("downloadPdfButton").addEventListener("click", function(
     pdf.text("Relatório de Solicitação de Serviço", pageWidth / 2, y, { align: "center" });
     y += 15; // Espaço abaixo do título
 
-    // Função para adicionar seções centralizadas
+    // Função para adicionar seções formatadas corretamente
     function addSection(title) {
-        y += 10; // Espaço acima da seção
+        y += 10; // Espaço antes da seção
         pdf.setFont("helvetica", "bold");
         pdf.setFontSize(14);
         pdf.text(title, pageWidth / 2, y, { align: "center" });
-        y += 8; // Espaço abaixo do título da seção
+        y += 8; // Espaço abaixo do título
     }
 
-    // Função para adicionar informações com indentação
+    // Função para adicionar informações corretamente espaçadas
     function addText(label, text) {
         pdf.setFont("helvetica", "bold");
-        pdf.text(label, 10, y);
+        pdf.text(label, marginLeft, y);
         pdf.setFont("helvetica", "normal");
-        pdf.text(text, 15, y); // deslocado 5mm (~0.5cm) para a direita
-        y += 7;
+        pdf.text(text, marginLeft + 40, y); // deslocado para evitar sobreposição
+        y += 8; // Garante espaçamento adequado
     }
 
-    // Adicionando as seções formatadas
+    // Adicionando as seções com formatação ajustada
     addSection("Tipo de Serviço");
     addText("Tipo de Serviço:", tipoServico);
     addText("Opção 1:", opcao1);
@@ -196,13 +197,14 @@ document.getElementById("downloadPdfButton").addEventListener("click", function(
     addSection("Descrição do Serviço");
     pdf.setFont("helvetica", "normal");
     const descricaoDividida = pdf.splitTextToSize(descricaoServico, 180);
-    pdf.text(descricaoDividida, 15, y + 5);
+    pdf.text(descricaoDividida, marginLeft, y + 5);
+    y += descricaoDividida.length * 7; // Ajusta a altura conforme o tamanho da descrição
 
     // Salvando o PDF
     pdf.save("Relatorio_Servico.pdf");
 });
 
-    </script>
+</script>
 </body>
 </html>
 
