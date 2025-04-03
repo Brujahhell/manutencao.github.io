@@ -135,8 +135,8 @@ document.getElementById("downloadPdfButton").addEventListener("click", function(
 
     // Pegando os valores do formulário
     const tipoServico = document.querySelector("select[name='tipo_servico']").value;
-    const subServico = document.querySelector("select[name='subserviço']").value;
-    const detalhe = document.querySelector("select[name='detalhe']").value;
+    const opcao1 = document.querySelector("select[name='subserviço']").value;
+    const opcao2 = document.querySelector("select[name='detalhe']").value;
     const nome = document.querySelector("input[name='nome']").value;
     const email = document.querySelector("input[name='email']").value;
     const telefone1 = document.querySelector("input[name='telefone1']").value;
@@ -149,44 +149,58 @@ document.getElementById("downloadPdfButton").addEventListener("click", function(
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
 
+    // Definir fonte padrão
     pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(16);
-    pdf.text("Solicitação de Serviço", 105, 20, null, null, "center");
-
-    pdf.setFontSize(12);
-    pdf.setFont("helvetica", "normal");
     
-    let y = 40; // Posição inicial no PDF
+    // Cabeçalho principal
+    pdf.setFontSize(18);
+    pdf.text("Relatório de Solicitação de Serviço", 10, 20);
+    
+    pdf.setFontSize(12);
+    let y = 30; // Posição inicial
 
-    const addText = (label, text) => {
+    // Função para adicionar seções com título em negrito
+    function addSection(title) {
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(14);
+        pdf.text(title, 10, y);
+        y += 8;
+        pdf.setFontSize(12);
+    }
+
+    // Função para adicionar texto formatado
+    function addText(label, text) {
         pdf.setFont("helvetica", "bold");
         pdf.text(label, 10, y);
         pdf.setFont("helvetica", "normal");
-        pdf.text(text, 60, y);
-        y += 10;
-    };
+        pdf.text(text, 50, y);
+        y += 7;
+    }
 
+    // Adicionando seções formatadas
+    addSection("Tipo de Serviço");
     addText("Tipo de Serviço:", tipoServico);
-    addText("Subserviço:", subServico);
-    addText("Detalhe:", detalhe);
+    addText("Opção 1:", opcao1);
+    addText("Opção 2:", opcao2);
+
+    addSection("Informações do Solicitante");
     addText("Nome:", nome);
     addText("E-mail:", email);
     addText("Telefone 1:", telefone1);
     addText("Telefone 2:", telefone2);
-    addText("Endereço:", endereco);
+
+    addSection("Localização");
+    addText("Endereço Completo:", endereco);
     addText("Município:", municipio);
 
-    // Descrição do serviço (quebra de linha automática)
-    pdf.setFont("helvetica", "bold");
-    pdf.text("Descrição do Serviço:", 10, y);
+    addSection("Descrição do Serviço");
     pdf.setFont("helvetica", "normal");
     const descricaoDividida = pdf.splitTextToSize(descricaoServico, 180);
-    pdf.text(descricaoDividida, 10, y + 10);
-    
-    // Salvando o PDF
-    pdf.save("Solicitacao_Servico.pdf");
-});
+    pdf.text(descricaoDividida, 10, y + 5);
 
+    // Salvando o PDF
+    pdf.save("Relatorio_Servico.pdf");
+});
 
     </script>
 </body>
