@@ -153,3 +153,51 @@ html, body {
 .text-input {
     text-align: center;
 }
+
+
+@media (max-width: 1024px) {
+    .textorodape {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .coluna-30, .coluna-30icon {
+        width: 100%;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+
+    .linhalogo,
+    .linha2,
+    .linha3,
+    .linha4,
+    .form1,
+    .form2,
+    .form3 {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .select-input,
+    .text_area,
+    .input-form {
+        width: 90%;
+        font-size: 120%;
+    }
+
+    .button {
+        width: 90%;
+        font-size: 120%;
+        padding: 12px 24px;
+    }
+
+    #rodapé {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #rodapé p {
+        margin: 5px 0;
+    }
+}
+
