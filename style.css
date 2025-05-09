@@ -166,8 +166,11 @@ html, body {
         flex-direction: column;
         margin-top: 10px;
     }
-
-    .linhalogo,
+    .linhalogo {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    }
     .linha2,
     .linha3,
     .linha4,
